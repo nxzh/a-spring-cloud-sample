@@ -10,9 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
-/**
- * Authorization server setup.
- */
+/** Authorization server setup. */
 @Configuration
 @EnableAuthorizationServer
 @Import(SecurityProblemSupport.class)
@@ -20,41 +18,34 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
   private ApplicationContext applicationContext;
   private SecurityProblemSupport problemSupport;
-  /**
-   * Default access token validity time is 2 hours.
-   */
+  /** Default access token validity time is 2 hours. */
   private static final Integer DEFAULT_ACCESS_TOKEN_VALIDITY_SECS = 7200;
 
-  /**
-   * Default refresh token validity time is 2 days.
-   */
+  /** Default refresh token validity time is 2 days. */
   private static final Integer DEFAULT_REFRESH_TOKEN_VALIDITY_SECS = 172_800;
 
   public AuthorizationServerConfiguration(
-      ApplicationContext applicationContext,
-      SecurityProblemSupport problemSupport) {
+      ApplicationContext applicationContext, SecurityProblemSupport problemSupport) {
     this.applicationContext = applicationContext;
     this.problemSupport = problemSupport;
   }
 
-  /**
-   * Use to configure security constraint with Token Endpoint.
-   */
+  /** Use to configure security constraint with Token Endpoint. */
   @Override
   public void configure(AuthorizationServerSecurityConfigurer authServer) throws Exception {
-    authServer.accessDeniedHandler(problemSupport).authenticationEntryPoint(problemSupport)
+    authServer
+        .accessDeniedHandler(problemSupport)
+        .authenticationEntryPoint(problemSupport)
         .tokenKeyAccess(
             "isAnonymous() || hasAuthority('" + ClientAuthoritiesConstants.TRUSTED_CLIENT + "')")
-        .checkTokenAccess(
-            "hasAuthority('" + ClientAuthoritiesConstants.TRUSTED_CLIENT + "')");
+        .checkTokenAccess("hasAuthority('" + ClientAuthoritiesConstants.TRUSTED_CLIENT + "')");
   }
 
-  /**
-   * Use to configure OAuth Client.
-   */
+  /** Use to configure OAuth Client. */
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    clients.inMemory()
+    clients
+        .inMemory()
         .withClient("genie-mobile")
         .secret("genie-mobile")
         .authorities(ClientAuthoritiesConstants.TRUSTED_CLIENT)
@@ -65,25 +56,21 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
             OAuth2ClientGrantTypeConstants.AUTHORIZATION_CODE,
             OAuth2ClientGrantTypeConstants.IMPLICIT,
             OAuth2ClientGrantTypeConstants.REFRESH_TOKEN,
-            OAuth2ClientGrantTypeConstants.PASSWORD
-        )
+            OAuth2ClientGrantTypeConstants.PASSWORD)
         .accessTokenValiditySeconds(DEFAULT_ACCESS_TOKEN_VALIDITY_SECS)
         .refreshTokenValiditySeconds(DEFAULT_REFRESH_TOKEN_VALIDITY_SECS)
+        .and()
         .withClient("apidoc")
         .secret("apidoc")
         .authorities(ClientAuthoritiesConstants.TRUSTED_CLIENT)
         .scopes(ClientScopesConstants.ALL)
         .autoApprove(true)
-        .authorizedGrantTypes(
-            OAuth2ClientGrantTypeConstants.PASSWORD
-        )
+        .authorizedGrantTypes(OAuth2ClientGrantTypeConstants.PASSWORD)
         .accessTokenValiditySeconds(DEFAULT_ACCESS_TOKEN_VALIDITY_SECS)
         .refreshTokenValiditySeconds(DEFAULT_REFRESH_TOKEN_VALIDITY_SECS);
   }
 
-  /**
-   * Use to configure the 'authorization' and 'token' endpoints and token services.
-   */
+  /** Use to configure the 'authorization' and 'token' endpoints and token services. */
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     super.configure(endpoints);

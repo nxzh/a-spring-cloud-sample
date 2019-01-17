@@ -1,0 +1,65 @@
+server:
+  port: 8761
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    lease-renewal-interval-in-seconds: 5 # instance heartbeat interval
+    lease-expiration-duration-in-seconds: 15 # remove the instance if no heartbeat received in past xx seconds
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 60000
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      default-zone: ${eureka.instance.hostname}:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}/eureka
+
+---
+spring:
+  profiles: cn-hz-z1  # for zone cn-hz-z1
+eureka:
+  instance:
+    hostname: cn-hz-z1
+  client:
+    region: capgemini-cn-hz # Regions are separated from region. May not be connected.
+    availability-zones:
+      capgemini-cn-hz: cn-hz-z1, cn-hz-z2
+    service-url:
+      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}
+      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}
+
+---
+spring:
+  profiles: cn-hz-z2  # for zone cn-hz-z2
+eureka:
+  instance:
+    hostname: cn-hz-z2
+  client:
+    region: capgemini-cn-hz # Regions are separated from region. May not be connected.
+    availability-zones:
+      capgemini-cn-hz: cn-hz-z1, cn-hz-z2
+    service-url:
+      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}:${ZONE_1_HOSTNAME:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}}/eureka
+      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}:${ZONE_2_HOSTNAME:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}}/eureka

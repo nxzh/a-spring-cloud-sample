@@ -1,11 +1,10 @@
 server:
-  port: 8761
+  port: ${SERVER_PORT:8761}
   undertow:
     io-threads: 8
     worker-threads: 256
     buffer-size: 1024
     direct-buffers: true
-
 
 management:
   endpoints:
@@ -34,7 +33,7 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      default-zone: ${eureka.instance.hostname}:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}/eureka
+      default-zone: ${eureka.instance.hostname}:${server.port}/eureka/
 
 ---
 spring:
@@ -61,5 +60,5 @@ eureka:
     availability-zones:
       capgemini-cn-hz: cn-hz-z1, cn-hz-z2
     service-url:
-      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}:${ZONE_1_HOSTNAME:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}}/eureka
-      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}:${ZONE_2_HOSTNAME:${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:8761}}/eureka
+      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}:${ZONE_1_HOSTNAME:${ZONE_1_REGISTRY_PORT:8761}}/eureka
+      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}:${ZONE_2_HOSTNAME:${ZONE_2_REGISTRY_PORT:8761}}/eureka

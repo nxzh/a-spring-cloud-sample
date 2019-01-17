@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: uaa-service
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false

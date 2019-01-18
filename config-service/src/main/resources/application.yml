@@ -1,0 +1,40 @@
+server:
+  port: 8888
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
+  client:
+    healthcheck:
+      enabled: true
+    service-url:
+      default-zone: ${REGISTRY_USER:admin}:${REGISTRY_PASSWORD:admin123}@${REGISTRY_HOST:localhost}:${REGISTRY_PORT:8761}/eureka
+    fetch-registry: true
+    register-with-eureka: true
+    prefer-same-zone-eureka: true
+    registry-fetch-interval-seconds: 30
+spring:
+  config:
+    server:
+      git:
+        uri: https://github.com/nxzh/a-spring-could-sample-config-repo.git

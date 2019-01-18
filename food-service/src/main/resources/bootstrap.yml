@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: food-service
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false

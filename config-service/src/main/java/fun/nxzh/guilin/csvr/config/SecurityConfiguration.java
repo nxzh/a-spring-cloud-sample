@@ -41,9 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       authenticationManagerBuilder
           .inMemoryAuthentication()
           .passwordEncoder(passwordEncoder())
-          .withUser("admin")
-          .password(passwordEncoder().encode("admin123"))
-          .roles("ADMIN");
+          .withUser("system")
+          .password(passwordEncoder().encode("sys123"))
+          .roles("SYSTEM");
     } catch (Exception e) {
       throw new BeanInitializationException("Security configuration failed", e);
     }
@@ -90,12 +90,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/eureka/**")
         .permitAll()
-        .antMatchers("/management/health")
-        .permitAll()
-        .antMatchers("/management/info")
-        .permitAll()
-        .antMatchers("/management/**")
-        .hasAuthority(AuthoritiesConstants.ADMIN)
+        .antMatchers("/manage/**")
+        .hasAuthority(AuthoritiesConstants.SYSTEM)
         .and()
         .httpBasic();
   }

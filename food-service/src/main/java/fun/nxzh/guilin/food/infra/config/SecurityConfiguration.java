@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.discovery.config;
+package fun.nxzh.guilin.food.infra.config;
 
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.BeanInitializationException;

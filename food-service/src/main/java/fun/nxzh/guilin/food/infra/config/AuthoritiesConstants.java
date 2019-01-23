@@ -1,7 +1,11 @@
 package fun.nxzh.guilin.food.infra.config;
 
-/** Constants for Spring Security authorities. */
+/**
+ * Constants for Spring Security authorities.
+ */
 public final class AuthoritiesConstants {
+
+  public static final String SYSTEM = "ROLE_SYSTEM";
 
   public static final String ADMIN = "ROLE_ADMIN";
 
@@ -9,5 +13,6 @@ public final class AuthoritiesConstants {
 
   public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
-  private AuthoritiesConstants() {}
+  private AuthoritiesConstants() {
+  }
 }

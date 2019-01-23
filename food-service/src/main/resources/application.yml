@@ -28,6 +28,7 @@ management:
   endpoint:
     health:
       show-details: when_authorized
+      roles: SYSTEM
     metrics:
       enabled: true
   info:

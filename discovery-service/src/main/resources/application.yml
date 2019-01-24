@@ -6,6 +6,13 @@ server:
     buffer-size: 1024
     direct-buffers: true
 
+spring:
+  security:
+    user:
+      name: ${REGISTRY_USER:system}
+      password: ${REGISTRY_PASSWORD:sys123}
+      roles: SYSTEM
+
 management:
   endpoints:
     web:
@@ -25,16 +32,16 @@ management:
 eureka:
   instance:
     hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
-    lease-renewal-interval-in-seconds: 5 # instance heartbeat interval
-    lease-expiration-duration-in-seconds: 15 # remove the instance if no heartbeat received in past xx seconds
+    leaseRenewalIntervalInSeconds: 5 # instance heartbeat interval
+    leaseExpirationDurationInSeconds: 15 # remove the instance if no heartbeat received in past xx seconds
   server:
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 60000
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 60000
   client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      default-zone: ${eureka.instance.hostname}:${server.port}/eureka/
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${REGISTRY_USER:system}:${REGISTRY_PASSWORD:sys123}@${eureka.instance.hostname}:${server.port}/eureka/
 
 ---
 spring:
@@ -44,9 +51,9 @@ eureka:
     hostname: cn-hz-z1
   client:
     region: capgemini-cn-hz # Regions are separated from region. May not be connected.
-    availability-zones:
+    availabilityZones:
       capgemini-cn-hz: cn-hz-z1, cn-hz-z2
-    service-url:
+    serviceUrl:
       cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}
       cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}
 
@@ -58,8 +65,8 @@ eureka:
     hostname: cn-hz-z2
   client:
     region: capgemini-cn-hz # Regions are separated from region. May not be connected.
-    availability-zones:
+    availabilityZones:
       capgemini-cn-hz: cn-hz-z1, cn-hz-z2
-    service-url:
+    serviceUrl:
       cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}:${ZONE_1_HOSTNAME:${ZONE_1_REGISTRY_PORT:8761}}/eureka
       cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}:${ZONE_2_HOSTNAME:${ZONE_2_REGISTRY_PORT:8761}}/eureka

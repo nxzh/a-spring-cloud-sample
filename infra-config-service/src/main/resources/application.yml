@@ -1,53 +1,11 @@
-server:
-  port: 8888
-  undertow:
-    io-threads: 8
-    worker-threads: 256
-    buffer-size: 1024
-    direct-buffers: true
-
-management:
-  endpoints:
-    web:
-      base-path: /manage
-      exposure:
-        include: configprops, env, health, info, threaddump
-  endpoint:
-    health:
-      show-details: when_authorized
-      roles: SYSTEM
-    metrics:
-      enabled: true
-  info:
-    git:
-      mode: full
-
 info:
   project:
     version: @project.version@
 
-# Eureka's configuration MUST be in thisIsAField formant instead of this-is-a-field format.
-# Otherwise, there must be some issues.
+# Put healthcheck.enabled=true here instead of in bootstrap.yml.
+# Otherwise the status in Eureka always get unknown error.
+# Other configuration need to be in bootstrap if we set spring.cloud.discovery.enabled=true
 eureka:
-  instance:
-    statusPageUrlPath: ${management.endpoints.web.base-path}/info
-    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
-    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
   client:
     healthcheck:
       enabled: true
-    serviceUrl:
-      defaultZone: http://${REGISTRY_USER:system}:${REGISTRY_PASSWORD:sys123}@${REGISTRY_HOST:localhost}:${REGISTRY_PORT:8761}/eureka/
-    fetchRegistry: true
-    registerWithEureka: true
-    preferSameZoneEureka: true
-    registryFetchIntervalSeconds: 30
-
-spring:
-  cloud:
-    config:
-      server:
-        git:
-          uri: https://github.com/nxzh/a-spring-could-sample-config-repo.git
-          username:
-          password:

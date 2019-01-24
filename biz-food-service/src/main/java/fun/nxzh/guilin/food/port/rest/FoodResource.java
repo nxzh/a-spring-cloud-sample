@@ -1,8 +1,6 @@
 package fun.nxzh.guilin.food.port.rest;
 
 import fun.nxzh.guilin.food.infra.config.ApplicationProperties;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +11,5 @@ public class FoodResource {
 
   public FoodResource(ApplicationProperties applicationProperties) {
     this.applicationProperties = applicationProperties;
-  }
-
-  @GetMapping(value = "/conftest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public String confTest() {
-    return applicationProperties.getConfigTest();
   }
 }

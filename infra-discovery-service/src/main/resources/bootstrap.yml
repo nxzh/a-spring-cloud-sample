@@ -1,8 +1,79 @@
+server:
+  port: ${SERVER_PORT:8761}
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
 spring:
   application:
     name: discovery-service
+  security:
+    user:
+      name: ${REGISTRY_USERNAME:eureka}
+      password: ${REGISTRY_PASSWORD:erk123}
+      roles: SYSTEM
   cloud:
     config:
       enabled: false
       discovery:
         enabled: false
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: SYSTEM
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    leaseRenewalIntervalInSeconds: 5 # instance heartbeat interval
+    leaseExpirationDurationInSeconds: 15 # remove the instance if no heartbeat received in past xx seconds
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 60000
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${REGISTRY_USERNAME:eureka}:${REGISTRY_PASSWORD:erk123}@${eureka.instance.hostname}:${server.port}/eureka/
+
+---
+spring:
+  profiles: cn-hz-z1  # for zone cn-hz-z1
+eureka:
+  instance:
+    hostname: cn-hz-z1
+  client:
+    region: capgemini-cn-hz # Regions are separated from region. May not be connected.
+    availabilityZones:
+      capgemini-cn-hz: cn-hz-z1, cn-hz-z2
+    serviceUrl:
+      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}
+      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}
+
+---
+spring:
+  profiles: cn-hz-z2  # for zone cn-hz-z2
+eureka:
+  instance:
+    hostname: cn-hz-z2
+  client:
+    region: capgemini-cn-hz # Regions are separated from region. May not be connected.
+    availabilityZones:
+      capgemini-cn-hz: cn-hz-z1, cn-hz-z2
+    serviceUrl:
+      cn-hz-z1: ${ZONE_1_HOSTNAME:cn-hz-z1}:${ZONE_1_HOSTNAME:${ZONE_1_REGISTRY_PORT:8761}}/eureka
+      cn-hz-z2: ${ZONE_2_HOSTNAME:cn-hz-z2}:${ZONE_2_HOSTNAME:${ZONE_2_REGISTRY_PORT:8761}}/eureka

@@ -2,6 +2,8 @@
 
 * Spring Cloud Config
 * Authentication Server
+* Add Gateway
+* Swagger Configuration
 * Spring Bus
 * Spring Cloud Stream with RabbitMQ
 * Redis Database Integration

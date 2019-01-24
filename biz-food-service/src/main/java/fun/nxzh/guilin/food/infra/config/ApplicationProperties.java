@@ -7,18 +7,8 @@ public class ApplicationProperties {
 
   private Swagger swagger = new Swagger();
 
-  private String configTest;
-
   public void setSwagger(Swagger swagger) {
     this.swagger = swagger;
-  }
-
-  public String getConfigTest() {
-    return configTest;
-  }
-
-  public void setConfigTest(String configTest) {
-    this.configTest = configTest;
   }
 
   public Swagger getSwagger() {

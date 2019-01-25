@@ -1,19 +1,6 @@
-server:
-  port: ${SERVER_PORT:8888}
-  undertow:
-    io-threads: 8
-    worker-threads: 256
-    buffer-size: 1024
-    direct-buffers: true
-
 spring:
   application:
     name: config-service
-  security:
-    user:
-      name: ${CONFIG_SERVER_USERNAME:config}
-      password: ${CONFIG_SERVER_PASSWORD:cfg123}
-      roles: SYSTEM
   cloud:
     config:
       server:
@@ -25,33 +12,9 @@ spring:
           timeout: 60
           refresh-rate: 60
 
-management:
-  endpoints:
-    web:
-      base-path: /manage
-      exposure:
-        include: configprops, env, health, info, threaddump
-  endpoint:
-    health:
-      show-details: when_authorized
-      roles: SYSTEM
-    metrics:
-      enabled: true
-  info:
-    git:
-      mode: full
-
 # Eureka's configuration MUST be in thisIsAField formant instead of this-is-a-field format.
 # Otherwise, there must be some issues.
 eureka:
-  instance:
-    statusPageUrlPath: ${management.endpoints.web.base-path}/info
-    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
-    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
   client:
     serviceUrl:
       defaultZone: http://${REGISTRY_USERNAME:eureka}:${REGISTRY_PASSWORD:erk123}@${REGISTRY_HOSTNAME:localhost}:${REGISTRY_PORT:8761}/eureka/
-    fetchRegistry: true
-    registerWithEureka: true
-    preferSameZoneEureka: true
-    registryFetchIntervalSeconds: 30

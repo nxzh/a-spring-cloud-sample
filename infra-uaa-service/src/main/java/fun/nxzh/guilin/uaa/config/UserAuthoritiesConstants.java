@@ -1,7 +1,9 @@
 package fun.nxzh.guilin.uaa.config;
 
 /** Constants for Spring Security authorities. */
-public final class AuthoritiesConstants {
+public final class UserAuthoritiesConstants {
+
+  public static final String SYSTEM = "ROLE_SYSTEM";
 
   public static final String ADMIN = "ROLE_ADMIN";
 
@@ -9,5 +11,5 @@ public final class AuthoritiesConstants {
 
   public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
-  private AuthoritiesConstants() {}
+  private UserAuthoritiesConstants() {}
 }

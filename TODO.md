@@ -1,6 +1,9 @@
-# TODO
 
 * Spring Cloud Config
+
+# TODO
+
+
 * Authentication Server
 * Add Gateway
 * Swagger Configuration

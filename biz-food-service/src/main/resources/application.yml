@@ -1,14 +1,66 @@
+server:
+  port: ${SERVER_PORT:9010}
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  security:
+    user:
+      name: system
+      password: sys123
+      roles: SYSTEM
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DB_URL:jdbc:mysql://localhost:3306/guilin_food?useUnicode=true&characterEncoding=utf8&useSSL=false}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:admin}
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: SYSTEM
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+
 info:
   project:
     version: @project.version@
 
-# Put healthcheck.enabled=true here instead of in bootstrap.yml.
+# Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
-# Other configuration need to be in bootstrap if we set spring.cloud.discovery.enabled=true
+# eureka.client.serviceUrl.defaultZone need to be set in
+# bootstrap.yml if set spring.cloud.discovery.enabled=true
 eureka:
+  instance:
+    statusPageUrlPath: ${management.endpoints.web.base-path}/info
+    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
+    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
   client:
     healthcheck:
       enabled: true
+    fetchRegistry: true
+    registerWithEureka: true
+    preferSameZoneEureka: true
+    registryFetchIntervalSeconds: 30
 
 #mybatis:
 #  config-location: classpath:mybatis-config.xml

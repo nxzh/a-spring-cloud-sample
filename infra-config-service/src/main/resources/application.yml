@@ -1,11 +1,51 @@
+server:
+  port: ${SERVER_PORT:8888}
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  security:
+    user:
+      name: ${CONFIG_SERVER_USERNAME:config}
+      password: ${CONFIG_SERVER_PASSWORD:cfg123}
+      roles: SYSTEM
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: SYSTEM
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
 info:
   project:
     version: @project.version@
 
-# Put healthcheck.enabled=true here instead of in bootstrap.yml.
+# Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
-# Other configuration need to be in bootstrap if we set spring.cloud.discovery.enabled=true
+# eureka.client.serviceUrl.defaultZone need to be set in
+# bootstrap.yml if set spring.cloud.discovery.enabled=true
 eureka:
+  instance:
+    statusPageUrlPath: ${management.endpoints.web.base-path}/info
+    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
+    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
   client:
     healthcheck:
       enabled: true
+    fetchRegistry: true
+    registerWithEureka: true
+    preferSameZoneEureka: true
+    registryFetchIntervalSeconds: 30

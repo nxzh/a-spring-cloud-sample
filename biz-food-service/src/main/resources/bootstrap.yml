@@ -1,19 +1,6 @@
-server:
-  port: ${SERVER_PORT:9010}
-  undertow:
-    io-threads: 8
-    worker-threads: 256
-    buffer-size: 1024
-    direct-buffers: true
-
 spring:
   application:
     name: food-service
-  security:
-    user:
-      name: system
-      password: sys123
-      roles: SYSTEM
   cloud:
     config:
       enabled: true
@@ -23,46 +10,12 @@ spring:
         service-id: config-service
       username: ${CONFIG_SERVER_USERNAME:config}
       password: ${CONFIG_SERVER_PASSWORD:cfg123}
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: ${DB_URL:jdbc:mysql://localhost:3306/guilin_food?useUnicode=true&characterEncoding=utf8&useSSL=false}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:admin}
-    hikari:
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-
-management:
-  endpoints:
-    web:
-      base-path: /manage
-      exposure:
-        include: configprops, env, health, info, threaddump
-  endpoint:
-    health:
-      show-details: when_authorized
-      roles: SYSTEM
-    metrics:
-      enabled: true
-  info:
-    git:
-      mode: full
 
 # Eureka's configuration MUST be in thisIsAField formant instead of this-is-a-field format.
 # Otherwise, there must be some issues.
 eureka:
-  instance:
-    statusPageUrlPath: ${management.endpoints.web.base-path}/info
-    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
-    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
   client:
     serviceUrl:
       defaultZone: http://${REGISTRY_USERNAME:eureka}:${REGISTRY_PASSWORD:erk123}@${REGISTRY_HOSTNAME:localhost}:${REGISTRY_PORT:8761}/eureka/
-    fetchRegistry: true
-    registerWithEureka: true
-    preferSameZoneEureka: true
-    registryFetchIntervalSeconds: 30
+
 

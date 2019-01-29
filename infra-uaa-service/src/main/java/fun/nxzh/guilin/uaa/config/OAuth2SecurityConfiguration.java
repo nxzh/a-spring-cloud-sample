@@ -198,6 +198,8 @@ public class OAuth2SecurityConfiguration {
           .antMatchers("/v2/api-docs/**")
           .permitAll()
           .antMatchers("/api/**")
+          .authenticated()
+          .anyRequest()
           .authenticated();
     }
 

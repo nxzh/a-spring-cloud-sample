@@ -1,6 +1,6 @@
 <html>
 <head>
-<link rel="stylesheet" href="../css/wro.css"/>
+	<title>Authorize</title>
 </head>
 <body>
 	<div class="container">

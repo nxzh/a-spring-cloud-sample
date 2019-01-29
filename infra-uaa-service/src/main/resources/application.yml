@@ -1,10 +1,16 @@
 server:
-  port: ${SERVER_PORT:9010}
+  port: ${SERVER_PORT:7777}
   undertow:
     io-threads: 8
     worker-threads: 256
     buffer-size: 1024
     direct-buffers: true
+  servlet:
+    context-path: /uaa
+    session:
+      cookie:
+        name: ASCS_S_ID
+        http-only: true
 
 spring:
   datasource:
@@ -74,3 +80,7 @@ application:
     contact-email:
     license:
     license-url:
+  key-store:
+    name: keystore.jks
+    password: password
+    alias: selfsigned

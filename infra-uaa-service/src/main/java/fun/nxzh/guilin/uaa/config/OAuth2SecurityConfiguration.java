@@ -32,16 +32,77 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 public class OAuth2SecurityConfiguration {
 
-  /** Authorization server setup. */
+
+  /**
+   * Resource server setup.
+   */
+  @Configuration
+  @EnableResourceServer
+  @Import(SecurityProblemSupport.class)
+  public static class ResourceServerConfiguration implements ResourceServerConfigurer {
+
+    private final TokenStore tokenStore;
+    private static final String RESOURCE_ID = "uaa";
+    private SecurityProblemSupport problemSupport;
+    private AuthenticationManager authenticationManager;
+
+    public ResourceServerConfiguration(
+        TokenStore tokenStore,
+        SecurityProblemSupport problemSupport,
+        AuthenticationManager authenticationManager) {
+      this.tokenStore = tokenStore;
+      this.problemSupport = problemSupport;
+      this.authenticationManager = authenticationManager;
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+      http.exceptionHandling()
+          .authenticationEntryPoint(problemSupport)
+          .accessDeniedHandler(problemSupport)
+          .and()
+          .sessionManagement()
+          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+          .and()
+          .requestMatchers().antMatchers("/management/**", "/api/**", "/v2/api-docs/**")
+          .and()
+          .authorizeRequests()
+          .antMatchers("/management/health")
+          .permitAll()
+          .antMatchers("/management/**")
+          .hasAuthority(UserAuthoritiesConstants.ADMIN)
+          .antMatchers("/v2/api-docs/**")
+          .permitAll()
+          .antMatchers("/api/**")
+          .authenticated();
+    }
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+      resources
+          .resourceId(RESOURCE_ID)
+          .tokenStore(tokenStore)
+          .accessDeniedHandler(problemSupport)
+          .authenticationEntryPoint(problemSupport);
+    }
+  }
+
+  /**
+   * Authorization server setup.
+   */
   @Configuration
   @EnableAuthorizationServer
   @Import(SecurityProblemSupport.class)
   public static class AuthorizationServerConfiguration implements AuthorizationServerConfigurer {
 
-    /** Default access token validity time is 2 hours. */
+    /**
+     * Default access token validity time is 2 hours.
+     */
     private static final Integer DEFAULT_ACCESS_TOKEN_VALIDITY_SECS = 7200;
 
-    /** Default refresh token validity time is 2 days. */
+    /**
+     * Default refresh token validity time is 2 days.
+     */
     private static final Integer DEFAULT_REFRESH_TOKEN_VALIDITY_SECS = 172_800;
 
     private ApplicationContext applicationContext;
@@ -87,6 +148,12 @@ public class OAuth2SecurityConfiguration {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
       clients
           .inMemory()
+          .withClient("internal")
+          .secret(passwordEncoder.encode("internal"))
+          .authorities(ClientAuthoritiesConstants.TRUSTED_CLIENT)
+          .scopes(ClientScopesConstants.ALL)
+          .authorizedGrantTypes(OAuth2ClientGrantTypeConstants.CLIENT_CREDENTIALS)
+          .and()
           .withClient("trust")
           .secret(passwordEncoder.encode("trust"))
           .authorities(ClientAuthoritiesConstants.TRUSTED_CLIENT)
@@ -146,70 +213,18 @@ public class OAuth2SecurityConfiguration {
      * and Authentication in both directions.
      *
      * @return an access token converter configured with the authorization server's public/private
-     *     keys
+     * keys
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
       KeyPair keyPair =
           new KeyStoreKeyFactory(
-                  new ClassPathResource(applicationProperties.getKeyStore().getName()),
-                  applicationProperties.getKeyStore().getPassword().toCharArray())
+              new ClassPathResource(applicationProperties.getKeyStore().getName()),
+              applicationProperties.getKeyStore().getPassword().toCharArray())
               .getKeyPair(applicationProperties.getKeyStore().getAlias());
       converter.setKeyPair(keyPair);
       return converter;
-    }
-  }
-
-  /** Resource server setup. */
-  @Configuration
-  @EnableResourceServer
-  @Import(SecurityProblemSupport.class)
-  public static class ResourceServerConfiguration implements ResourceServerConfigurer {
-
-    private final TokenStore tokenStore;
-    private static final String RESOURCE_ID = "uaa";
-    private SecurityProblemSupport problemSupport;
-    private AuthenticationManager authenticationManager;
-
-    public ResourceServerConfiguration(
-        TokenStore tokenStore,
-        SecurityProblemSupport problemSupport,
-        AuthenticationManager authenticationManager) {
-      this.tokenStore = tokenStore;
-      this.problemSupport = problemSupport;
-      this.authenticationManager = authenticationManager;
-    }
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-      http.exceptionHandling()
-          .authenticationEntryPoint(problemSupport)
-          .accessDeniedHandler(problemSupport)
-          .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-          .and()
-          .authorizeRequests()
-          .antMatchers("/management/health")
-          .permitAll()
-          .antMatchers("/management/**")
-          .hasAuthority(UserAuthoritiesConstants.ADMIN)
-          .antMatchers("/v2/api-docs/**")
-          .permitAll()
-          .antMatchers("/api/**")
-          .authenticated()
-          .anyRequest()
-          .authenticated();
-    }
-
-    @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-      resources
-          .resourceId(RESOURCE_ID)
-          .tokenStore(tokenStore)
-          .accessDeniedHandler(problemSupport)
-          .authenticationEntryPoint(problemSupport);
     }
   }
 }

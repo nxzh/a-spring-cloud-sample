@@ -23,6 +23,5 @@
 			<button class="btn btn-primary" type="submit">Deny</button>
 		</form>
 	</div>
-	<script src="../js/wro.js"	type="text/javascript"></script>
 </body>
 </html>

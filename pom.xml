@@ -13,6 +13,7 @@
     <module>infra-uaa-service</module>
     <module>infra-config-service</module>
     <module>biz-food-service</module>
+    <module>infra-gateway-service</module>
   </modules>
 
   <parent>

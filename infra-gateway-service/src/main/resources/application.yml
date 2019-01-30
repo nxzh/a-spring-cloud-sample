@@ -1,0 +1,70 @@
+server:
+  port: ${SERVER_PORT:8081}
+  undertow:
+    io-threads: 8
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  security:
+    user:
+      name: system
+      password: sys123
+      roles: SYSTEM
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: configprops, env, health, info, threaddump
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: SYSTEM
+    metrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+
+
+info:
+  project:
+    version: @project.version@
+
+# Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
+# Otherwise the status in Eureka always get unknown error.
+# eureka.client.serviceUrl.defaultZone need to be set in
+# bootstrap.yml if set spring.cloud.discovery.enabled=true
+eureka:
+  instance:
+    statusPageUrlPath: ${management.endpoints.web.base-path}/info
+    healthCheckUrlPath: ${management.endpoints.web.base-path}/health
+    instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.id}}
+  client:
+    healthcheck:
+      enabled: true
+    fetchRegistry: true
+    registerWithEureka: true
+    preferSameZoneEureka: true
+    registryFetchIntervalSeconds: 30
+
+#mybatis:
+#  config-location: classpath:mybatis-config.xml
+
+# swagger
+application:
+  swagger:
+    enable: ${SWAGGER_ENABLED:true}
+    default-include-pattern: /api/.*
+    title: @project.artifactId@
+    description: API documentation
+    version: v1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license:
+    license-url:

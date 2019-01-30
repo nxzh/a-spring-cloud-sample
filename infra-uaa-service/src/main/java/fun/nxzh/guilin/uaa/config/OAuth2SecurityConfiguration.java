@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,11 +33,11 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 public class OAuth2SecurityConfiguration {
 
-
   /**
    * Resource server setup.
    */
   @Configuration
+  @Order(70)
   @EnableResourceServer
   @Import(SecurityProblemSupport.class)
   public static class ResourceServerConfiguration implements ResourceServerConfigurer {
@@ -64,17 +65,14 @@ public class OAuth2SecurityConfiguration {
           .sessionManagement()
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
-          .requestMatchers().antMatchers("/management/**", "/api/**", "/v2/api-docs/**")
+          .requestMatchers().antMatchers("/api/**", "/v2/**")
           .and()
           .authorizeRequests()
-          .antMatchers("/management/health")
-          .permitAll()
-          .antMatchers("/management/**")
-          .hasAuthority(UserAuthoritiesConstants.ADMIN)
-          .antMatchers("/v2/api-docs/**")
+          .antMatchers("/v2/**")
           .permitAll()
           .antMatchers("/api/**")
-          .authenticated();
+          .authenticated()
+          .and().httpBasic().disable();
     }
 
     @Override

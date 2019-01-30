@@ -2,9 +2,11 @@ package fun.nxzh.guilin.uaa.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
+@Order(100)
 public class LoginSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Bean
@@ -52,33 +55,29 @@ public class LoginSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers().antMatchers(HttpMethod.OPTIONS)
+        .antMatchers("/js/**")
+        .antMatchers("/css/**")
+        .antMatchers("/v2/api-docs/**")
+        .antMatchers("/swagger-resources/configuration/ui")
+        .antMatchers("/swagger-resources/**")
+        .antMatchers("/webjars/springfox-swagger-ui/**")
+        .antMatchers("/swagger-ui.html");
+  }
+
+  @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.headers()
         .frameOptions()
         .sameOrigin()
         .and()
         .authorizeRequests()
-        .antMatchers(HttpMethod.OPTIONS)
-        .permitAll()
-        .antMatchers("/js/**")
-        .permitAll()
-        .antMatchers("/css/**")
-        .permitAll()
-        .antMatchers("/v2/api-docs/**")
-        .permitAll()
-        .antMatchers("/swagger-resources/configuration/ui")
-        .permitAll()
-        .antMatchers("/swagger-resources/**")
-        .permitAll()
-        .antMatchers("/webjars/springfox-swagger-ui/**")
-        .permitAll()
-        .antMatchers("/swagger-ui.html")
-        .permitAll()
         .anyRequest()
         .authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
-        .permitAll();
+        .permitAll().and().httpBasic().disable();
   }
 }

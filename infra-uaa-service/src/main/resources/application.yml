@@ -83,6 +83,9 @@ application:
     contact-email:
     license:
     license-url:
+    access-token-uri: /uaa/oauth/token
+    oauth-client-id: apidoc
+    oauth-client-secret: apidoc
   key-store:
     name: keystore.jks
     password: password

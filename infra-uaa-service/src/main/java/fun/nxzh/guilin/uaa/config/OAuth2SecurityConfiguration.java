@@ -33,9 +33,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Configuration
 public class OAuth2SecurityConfiguration {
 
-  /**
-   * Resource server setup.
-   */
+  /** Resource server setup. */
   @Configuration
   @Order(70)
   @EnableResourceServer
@@ -65,14 +63,17 @@ public class OAuth2SecurityConfiguration {
           .sessionManagement()
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
-          .requestMatchers().antMatchers("/api/**", "/v2/**")
+          .requestMatchers()
+          .antMatchers("/api/**", "/v2/**")
           .and()
           .authorizeRequests()
           .antMatchers("/v2/**")
           .permitAll()
           .antMatchers("/api/**")
           .authenticated()
-          .and().httpBasic().disable();
+          .and()
+          .httpBasic()
+          .disable();
     }
 
     @Override
@@ -85,22 +86,16 @@ public class OAuth2SecurityConfiguration {
     }
   }
 
-  /**
-   * Authorization server setup.
-   */
+  /** Authorization server setup. */
   @Configuration
   @EnableAuthorizationServer
   @Import(SecurityProblemSupport.class)
   public static class AuthorizationServerConfiguration implements AuthorizationServerConfigurer {
 
-    /**
-     * Default access token validity time is 2 hours.
-     */
+    /** Default access token validity time is 2 hours. */
     private static final Integer DEFAULT_ACCESS_TOKEN_VALIDITY_SECS = 7200;
 
-    /**
-     * Default refresh token validity time is 2 days.
-     */
+    /** Default refresh token validity time is 2 days. */
     private static final Integer DEFAULT_REFRESH_TOKEN_VALIDITY_SECS = 172_800;
 
     private ApplicationContext applicationContext;
@@ -166,6 +161,15 @@ public class OAuth2SecurityConfiguration {
           .accessTokenValiditySeconds(DEFAULT_ACCESS_TOKEN_VALIDITY_SECS)
           .refreshTokenValiditySeconds(DEFAULT_REFRESH_TOKEN_VALIDITY_SECS)
           .and()
+          .withClient("apidoc")
+          .secret(passwordEncoder.encode("apidoc"))
+          .authorities(ClientAuthoritiesConstants.TRUSTED_CLIENT)
+          .scopes(ClientScopesConstants.ALL)
+          .autoApprove(true)
+          .authorizedGrantTypes(OAuth2ClientGrantTypeConstants.PASSWORD)
+          .accessTokenValiditySeconds(DEFAULT_ACCESS_TOKEN_VALIDITY_SECS)
+          .refreshTokenValiditySeconds(DEFAULT_REFRESH_TOKEN_VALIDITY_SECS)
+          .and()
           .withClient("untrust")
           .secret(passwordEncoder.encode("untrust"))
           .authorities(ClientAuthoritiesConstants.UNTRUSTED_CLIENT)
@@ -211,15 +215,15 @@ public class OAuth2SecurityConfiguration {
      * and Authentication in both directions.
      *
      * @return an access token converter configured with the authorization server's public/private
-     * keys
+     *     keys
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
       KeyPair keyPair =
           new KeyStoreKeyFactory(
-              new ClassPathResource(applicationProperties.getKeyStore().getName()),
-              applicationProperties.getKeyStore().getPassword().toCharArray())
+                  new ClassPathResource(applicationProperties.getKeyStore().getName()),
+                  applicationProperties.getKeyStore().getPassword().toCharArray())
               .getKeyPair(applicationProperties.getKeyStore().getAlias());
       converter.setKeyPair(keyPair);
       return converter;

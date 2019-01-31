@@ -1,0 +1,53 @@
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: before_route
+#          uri: https://serverfault.com/
+#          predicates:
+#            - Before=2019-02-20T17:42:47.789-07:00[America/Denver]
+#
+#        - id: after_route
+#          uri: https://www.stackoverflow.com
+#          predicates:
+#            - After=2019-01-20T17:42:47.789-07:00[America/Denver]
+#
+#        - id: between_route
+#          uri: https://superuser.com/
+#          predicates:
+#            - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2020-01-21T17:42:47.789-07:00[America/Denver]
+#
+#        - id: cookie_route
+#          uri: https://math.stackexchange.com/
+#          predicates:
+#            - Cookie=math, st.*ex
+
+#        - id: header_route
+#          uri: https://askubuntu.com/
+#          predicates:
+#            - Header=X-Request-ubt, \d+
+#
+#        - id: host_route
+#          uri: https://english.stackexchange.com/
+#          predicates:
+#            - Host=**.test.com
+#
+#        - id: method_route
+#          uri: https://apple.stackexchange.com/
+#          predicates:
+#            - Method=GET
+
+#        - id: path_route
+#          uri: https://japanese.stackexchange.com/
+#          predicates:
+#            - Path=/t1/{segment}, /t2/t2/{segment}
+#
+#        - id: query_route
+#          uri: https://movies.stackexchange.com/
+#          predicates:
+#            - Query=baz, \d+
+
+#        - id: remoteaddr_route
+#          uri: https://pets.stackexchange.com/
+#          predicates:
+#            - RemoteAddr=

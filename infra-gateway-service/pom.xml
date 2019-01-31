@@ -21,18 +21,12 @@
       <artifactId>spring-cloud-starter-gateway</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-tomcat</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-afterburner</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-undertow</artifactId>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
   </dependencies>
 

@@ -29,7 +29,6 @@ management:
     git:
       mode: full
 
-
 info:
   project:
     version: @project.version@

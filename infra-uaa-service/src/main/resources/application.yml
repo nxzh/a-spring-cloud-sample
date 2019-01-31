@@ -64,7 +64,6 @@ eureka:
     registerWithEureka: true
     preferSameZoneEureka: true
     registryFetchIntervalSeconds: 30
-    enabled: false
 
 #mybatis:
 #  config-location: classpath:mybatis-config.xml

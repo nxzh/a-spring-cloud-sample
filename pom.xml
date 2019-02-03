@@ -14,6 +14,7 @@
     <module>infra-config-service</module>
     <module>biz-food-service</module>
     <module>infra-gateway-service</module>
+    <module>biz-facade-service</module>
   </modules>
 
   <parent>
@@ -33,6 +34,11 @@
     <springfox.version>2.8.0</springfox.version>
     <spring.security.oauth2.version>2.3.4.RELEASE</spring.security.oauth2.version>
     <spring.security.jwt.version>1.0.10.RELEASE</spring.security.jwt.version>
+    <org.mapstruct.version>1.2.0.Final</org.mapstruct.version>
+    <mysql.version>8.0.12</mysql.version>
+    <mybatis.version>1.3.2</mybatis.version>
+    <mybatis.pagehelper.version>1.2.5</mybatis.pagehelper.version>
+    <mybatis.typehandlers.jsr310.version>1.0.2</mybatis.typehandlers.jsr310.version>
   </properties>
 
   <dependencyManagement>
@@ -50,46 +56,19 @@
   <dependencies>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-config</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-security</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security.oauth</groupId>
-      <artifactId>spring-security-oauth2</artifactId>
-      <version>${spring.security.oauth2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-jwt</artifactId>
-      <version>${spring.security.jwt.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-oauth2</artifactId>
+      <artifactId>spring-cloud-starter-config</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-aop</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.zalando</groupId>
-      <artifactId>problem-spring-web</artifactId>
-      <version>${problem.spring.web.version}</version>
     </dependency>
     <dependency>
       <groupId>net.logstash.logback</groupId>

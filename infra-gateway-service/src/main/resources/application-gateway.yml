@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_v1_route
+          uri: lb://fasade/api/v1
+          predicates:
+            - Path=/fasade/api/v1

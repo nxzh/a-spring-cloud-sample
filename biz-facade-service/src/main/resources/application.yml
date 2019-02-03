@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:9010}
   undertow:
     io-threads: 8
     worker-threads: 256
@@ -7,8 +7,6 @@ server:
     direct-buffers: true
 
 spring:
-  profiles:
-    include: gateway
   security:
     user:
       name: system
@@ -31,6 +29,7 @@ management:
     git:
       mode: full
 
+
 info:
   project:
     version: @project.version@
@@ -51,7 +50,6 @@ eureka:
     registerWithEureka: true
     preferSameZoneEureka: true
     registryFetchIntervalSeconds: 30
-    enabled: false
 
 #mybatis:
 #  config-location: classpath:mybatis-config.xml

@@ -2,7 +2,14 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: api_v1_route
-          uri: lb://fasade/api/v1
+        - id: mobile_api_route
+          uri: lb://facade-service
           predicates:
-            - Path=/fasade/api/v1
+            - Path=/mobile/**
+          filters:
+#            - RewritePath=/mobile/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
+        - id: uaa_route
+          uri: lb://uaa-service
+          predicates:
+            - Path=/uaa/**

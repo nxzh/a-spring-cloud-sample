@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:9010}
+  port: ${SERVER_PORT:9050}
   undertow:
     io-threads: 8
     worker-threads: 256

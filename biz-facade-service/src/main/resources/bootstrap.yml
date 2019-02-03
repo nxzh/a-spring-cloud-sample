@@ -1,6 +1,6 @@
 spring:
   application:
-    name: food-service
+    name: facade-service
   cloud:
     config:
       enabled: true

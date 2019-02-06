@@ -3,10 +3,10 @@ spring:
     name: basket-service
   cloud:
     config:
-      enabled: false
+      enabled: true
       fail-fast: true
       discovery:
-        enabled: false
+        enabled: true
         service-id: config-service
       username: ${CONFIG_SERVER_USERNAME:config}
       password: ${CONFIG_SERVER_PASSWORD:cfg123}

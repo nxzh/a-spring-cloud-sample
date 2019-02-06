@@ -11,18 +11,6 @@ spring:
     log-request-details: true
   security:
     oauth2:
-      client:
-        registration:
-          uaa:
-            client-id: internal
-            client-secret: internal
-            scope: all
-            authorization-grant-type: client_credentials
-
-        provider:
-          uaa:
-            token-uri: http://localhost:7777/oauth/token
-            jwk-set-uri: http://localhost:7777/uaa/.well-known/jwks.json
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:7777/uaa/.well-known/jwks.json

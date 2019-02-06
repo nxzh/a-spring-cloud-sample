@@ -13,7 +13,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:7777/uaa/.well-known/jwks.json
+          jwk-set-uri: http://localhost:8081/uaa/.well-known/jwks.json
     user:
       name: system
       password: sys123

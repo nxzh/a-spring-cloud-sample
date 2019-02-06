@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerSecurityConfiguration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
@@ -43,15 +44,11 @@ public class OAuth2SecurityConfiguration {
     private final TokenStore tokenStore;
     private static final String RESOURCE_ID = "uaa";
     private SecurityProblemSupport problemSupport;
-    private AuthenticationManager authenticationManager;
 
     public ResourceServerConfiguration(
-        TokenStore tokenStore,
-        SecurityProblemSupport problemSupport,
-        AuthenticationManager authenticationManager) {
+        TokenStore tokenStore, SecurityProblemSupport problemSupport) {
       this.tokenStore = tokenStore;
       this.problemSupport = problemSupport;
-      this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -86,10 +83,25 @@ public class OAuth2SecurityConfiguration {
     }
   }
 
+  @Configuration
+  @Order(80)
+  class JwkSetEndpointConfiguration extends AuthorizationServerSecurityConfiguration {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      super.configure(http);
+      http.requestMatchers()
+          .mvcMatchers("/.well-known/jwks.json")
+          .and()
+          .authorizeRequests()
+          .mvcMatchers("/.well-known/jwks.json")
+          .permitAll();
+    }
+  }
+
   /** Authorization server setup. */
   @Configuration
   @EnableAuthorizationServer
-  @Import(SecurityProblemSupport.class)
+  @Import({SecurityProblemSupport.class, AuthorizationServerSecurityConfiguration.class})
   public static class AuthorizationServerConfiguration implements AuthorizationServerConfigurer {
 
     /** Default access token validity time is 2 hours. */
@@ -220,13 +232,16 @@ public class OAuth2SecurityConfiguration {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-      KeyPair keyPair =
-          new KeyStoreKeyFactory(
-                  new ClassPathResource(applicationProperties.getKeyStore().getName()),
-                  applicationProperties.getKeyStore().getPassword().toCharArray())
-              .getKeyPair(applicationProperties.getKeyStore().getAlias());
-      converter.setKeyPair(keyPair);
+      converter.setKeyPair(keyPair());
       return converter;
+    }
+
+    @Bean
+    public KeyPair keyPair() {
+      return new KeyStoreKeyFactory(
+              new ClassPathResource(applicationProperties.getKeyStore().getName()),
+              applicationProperties.getKeyStore().getPassword().toCharArray())
+          .getKeyPair(applicationProperties.getKeyStore().getAlias());
     }
   }
 }

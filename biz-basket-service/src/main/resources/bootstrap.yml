@@ -1,6 +1,6 @@
 spring:
   application:
-    name: facade-service
+    name: basket-service
   cloud:
     config:
       enabled: false

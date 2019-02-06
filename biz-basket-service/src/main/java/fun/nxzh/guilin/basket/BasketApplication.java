@@ -1,18 +1,16 @@
-package fun.nxzh.guilin.facade;
+package fun.nxzh.guilin.basket;
 
-import fun.nxzh.guilin.facade.config.ApplicationProperties;
+import fun.nxzh.guilin.basket.config.ApplicationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
 @EnableConfigurationProperties(ApplicationProperties.class)
-public class FacadeApplication {
+public class BasketApplication {
   public static void main(String[] args) {
-    SpringApplication.run(FacadeApplication.class, args);
+    SpringApplication.run(BasketApplication.class, args);
   }
 }

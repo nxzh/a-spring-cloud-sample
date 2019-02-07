@@ -3,7 +3,7 @@ spring:
     gateway:
       routes:
         - id: mobile_api_route
-       `   uri: lb://facade-service
+          uri: lb://facade-service
           predicates:
             - Path=/mobile/**
           filters:

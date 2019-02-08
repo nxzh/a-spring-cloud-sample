@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.basket.config;
+package fun.nxzh.guilin.order.infra.config.security;
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.basket.config;
+package fun.nxzh.guilin.basket.config.security;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

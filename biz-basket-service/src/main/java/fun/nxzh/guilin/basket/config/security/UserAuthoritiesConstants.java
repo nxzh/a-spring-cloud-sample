@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.basket.config;
+package fun.nxzh.guilin.basket.config.security;
 
 /** Constants for Spring Security authorities. */
 public final class UserAuthoritiesConstants {

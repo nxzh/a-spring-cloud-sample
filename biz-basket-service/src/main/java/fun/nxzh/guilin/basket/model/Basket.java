@@ -1,22 +1,24 @@
 package fun.nxzh.guilin.basket.model;
 
+import java.util.List;
+
 public class Basket {
-  private String userId;
-  private String basketId;
+  private String buyerId;
+  private List<BasketItem> items;
 
-  public String getUserId() {
-    return userId;
+  public String getBuyerId() {
+    return buyerId;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public void setBuyerId(String buyerId) {
+    this.buyerId = buyerId;
   }
 
-  public String getBasketId() {
-    return basketId;
+  public List<BasketItem> getItems() {
+    return items;
   }
 
-  public void setBasketId(String basketId) {
-    this.basketId = basketId;
+  public void setItems(List<BasketItem> items) {
+    this.items = items;
   }
 }

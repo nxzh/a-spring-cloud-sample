@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.basket.config;
+package fun.nxzh.guilin.basket.config.security;
 
 /**
  * All the authorities can be assigned to a client in the system. One to one mapping to table

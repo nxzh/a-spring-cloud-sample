@@ -1,6 +1,6 @@
 package fun.nxzh.guilin.facade.client;
 
-import fun.nxzh.guilin.facade.model.Basket;
+import fun.nxzh.guilin.facade.model.BasketCheckout;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface BasketClient {
 
   @PostMapping(value = "/checkout", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  String checkout(Basket basket);
+  String checkout(BasketCheckout basket);
 }

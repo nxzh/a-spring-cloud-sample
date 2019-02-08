@@ -1,7 +1,7 @@
 package fun.nxzh.guilin.facade.service;
 
 import fun.nxzh.guilin.facade.client.BasketClient;
-import fun.nxzh.guilin.facade.model.Basket;
+import fun.nxzh.guilin.facade.model.BasketCheckout;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +12,7 @@ public class BasketService {
     this.basketClient = basketClient;
   }
 
-  public String checkout(Basket basket) {
-    return basketClient.checkout(basket);
+  public String checkout(BasketCheckout basketCheckout) {
+    return basketClient.checkout(basketCheckout);
   }
 }

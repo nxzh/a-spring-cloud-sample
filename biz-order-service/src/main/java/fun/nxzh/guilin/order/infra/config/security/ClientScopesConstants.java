@@ -1,4 +1,4 @@
-package fun.nxzh.guilin.basket.config;
+package fun.nxzh.guilin.order.infra.config.security;
 
 public class ClientScopesConstants {
 

@@ -3,7 +3,7 @@
 * Authentication Server
 * Add Gateway
 # TODO
-
+* Spring Cloud Sleuth
 
 
 * Spring Bus
@@ -12,3 +12,6 @@
 * Redis Database Integration
 * Jenkins File
 * Docker File
+
+* Fix the Spring-Cloud-Stream bug 1614:
+https://github.com/spring-cloud/spring-cloud-stream/issues/1614

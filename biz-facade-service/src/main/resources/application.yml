@@ -19,6 +19,10 @@ spring:
       password: sys123
       roles: SYSTEM
 
+feign:
+  hystrix:
+    enabled: true
+
 management:
   endpoints:
     web:
@@ -34,7 +38,6 @@ management:
   info:
     git:
       mode: full
-
 
 info:
   project:
@@ -74,3 +77,4 @@ application:
     contact-email:
     license:
     license-url:
+

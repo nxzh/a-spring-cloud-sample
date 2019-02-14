@@ -28,7 +28,7 @@ management:
     web:
       base-path: /manage
       exposure:
-        include: configprops, env, health, info, threaddump
+        include: "*"
   endpoint:
     health:
       show-details: when_authorized

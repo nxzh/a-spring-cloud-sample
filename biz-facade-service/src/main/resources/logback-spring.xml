@@ -67,7 +67,7 @@
     </encoder>
   </appender>
   ​
-  <root level="WARN">
+  <root level="DEBUG">
     <appender-ref ref="console"/>
     <!-- uncomment this to have also JSON logs -->
     <appender-ref ref="logstash"/>

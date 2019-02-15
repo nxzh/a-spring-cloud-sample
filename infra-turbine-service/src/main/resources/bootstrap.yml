@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: turbine-service
+  cloud:
+    config:
+      enabled: false
+      fail-fast: true
+      discovery:
+        enabled: false
+        service-id: config-service
+      username: ${CONFIG_SERVER_USERNAME:config}
+      password: ${CONFIG_SERVER_PASSWORD:cfg123}
+
+# Eureka's configuration MUST be in thisIsAField formant instead of this-is-a-field format.
+# Otherwise, there must be some issues.
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${REGISTRY_USERNAME:eureka}:${REGISTRY_PASSWORD:erk123}@${REGISTRY_HOSTNAME:localhost}:${REGISTRY_PORT:8761}/eureka/
+
+

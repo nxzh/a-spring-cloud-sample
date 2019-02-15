@@ -16,6 +16,7 @@
     <module>biz-facade-service</module>
     <module>biz-order-service</module>
     <module>biz-basket-service</module>
+    <module>infra-turbine-service</module>
   </modules>
 
   <parent>

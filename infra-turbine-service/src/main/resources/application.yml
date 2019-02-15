@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:9000}
+  port: ${SERVER_PORT:8546}
   undertow:
     io-threads: 8
     worker-threads: 256
@@ -41,14 +41,14 @@ management:
       roles: SYSTEM
     metrics:
       enabled: true
-  #    hystrix:
-  #      stream:
-  #        enabled: true
   info:
     git:
       mode: full
 
-
+turbine:
+  aggregator:
+    cluster-config: '''default'''
+  app-config: facade-service
 
 info:
   project:

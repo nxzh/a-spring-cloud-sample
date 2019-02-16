@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8546}
+  port: ${SERVER_PORT:8556}
   undertow:
     io-threads: 8
     worker-threads: 256
@@ -13,6 +13,11 @@ spring:
     username: ${RABBIT_USERNAME:sid}
     password: ${RABBIT_PASSWORD:111111}
     virtual-host: ${RABBIT_VHOST:guilin}
+  cloud:
+    stream:
+      bindings:
+        turbineStreamInput:
+          destination: guilin_hystrix
   security:
     oauth2:
       resourceserver:
@@ -23,12 +28,6 @@ spring:
       password: sys123
       roles: SYSTEM
 
-feign:
-  hystrix:
-    enabled: true
-hystrix:
-  shareSecurityContext: true
-
 management:
   endpoints:
     web:
@@ -37,7 +36,7 @@ management:
         include: "*"
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: always
       roles: SYSTEM
     metrics:
       enabled: true
@@ -45,14 +44,15 @@ management:
     git:
       mode: full
 
-turbine:
-  aggregator:
-    cluster-config: '''default'''
-  app-config: facade-service
-
 info:
   project:
     version: @project.version@
+
+# refer to : https://www.acgist.com/article/555.html
+# but seems not that useful
+#turbine:
+#  stream:
+#    destination: guilin_hystrix
 
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.

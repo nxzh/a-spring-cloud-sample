@@ -17,6 +17,7 @@
     <module>biz-order-service</module>
     <module>biz-basket-service</module>
     <module>infra-turbine-service</module>
+    <module>infra-hystrix-dashboard</module>
   </modules>
 
   <parent>

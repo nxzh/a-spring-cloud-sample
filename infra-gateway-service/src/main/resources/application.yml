@@ -35,6 +35,8 @@ info:
   project:
     version: @project.version@
 
+spring.zipkin.sender.type: rabbit
+
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
 # eureka.client.serviceUrl.defaultZone need to be set in

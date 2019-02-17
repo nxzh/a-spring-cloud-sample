@@ -2,12 +2,14 @@
 * Spring Cloud Config
 * Authentication Server
 * Add Gateway
+* Spring Cloud Stream with RabbitMQ
+* Hystrix + Turbine
 # TODO
 * Spring Cloud Sleuth
-
+* Hystrix on Spring cloud gateway
 
 * Spring Bus
-* Spring Cloud Stream with RabbitMQ
+* ELK
 * Error Handler in facade-service
 * Redis Database Integration
 * Jenkins File

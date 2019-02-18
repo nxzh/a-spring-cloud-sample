@@ -7,6 +7,15 @@ server:
     direct-buffers: true
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/uaa/.well-known/jwks.json
+    user:
+      name: system
+      password: sys123
+      roles: SYSTEM
   rabbitmq:
     host: ${RABBIT_HOST:192.168.1.101}
     port: ${RABBIT_PORT:5672}
@@ -18,15 +27,13 @@ spring:
       bindings:
         hystrixStreamOutput:
           destination: guilin_hystrix
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8081/uaa/.well-known/jwks.json
-    user:
-      name: system
-      password: sys123
-      roles: SYSTEM
+  zipkin:
+    sender:
+      type: rabbit
+    base-url: http://zipkin-service/
+  sleuth:
+    sampler:
+      probability: 1.0
 
 feign:
   hystrix:
@@ -63,7 +70,9 @@ info:
   project:
     version: @project.version@
 
-
+zipkin:
+  rabbitmq:
+    queue: zipkin
 
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.

@@ -23,14 +23,16 @@ public class IntegrationEventListener {
     System.out.println("Received: " + value);
     channel.basicAck(deliveryTag, false);
   }
-  //
-  //  @StreamListener(value = IntegrationEventProcessor.INPUT, condition =
-  // "headers['x-request-type']=='2'")
-  //  public void handle2(
-  //      @Payload String value,
-  //      @Header(AmqpHeaders.CHANNEL) Channel channel,
-  //      @Header(AmqpHeaders.DELIVERY_TAG) Long deliveryTag)
-  //      throws IOException {
-  //    System.out.println("Received: " + value);
-  //  }
+
+  @StreamListener(value = IntegrationEventProcessor.INPUT, condition =
+      "headers['type']=='UserCheckoutAccepted'")
+  public void handle2(
+      @Payload String value,
+      @Header(AmqpHeaders.CHANNEL) Channel channel,
+      @Header(AmqpHeaders.DELIVERY_TAG) Long deliveryTag)
+      throws IOException {
+    System.out.println("Received: " + value);
+
+    channel.basicAck(deliveryTag, false);
+  }
 }

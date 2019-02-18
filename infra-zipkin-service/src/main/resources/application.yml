@@ -1,45 +1,40 @@
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8123}
   undertow:
     io-threads: 8
     worker-threads: 256
     buffer-size: 1024
     direct-buffers: true
 
-spring:
-  profiles:
-    include: gateway
-  security:
-    user:
-      name: system
-      password: sys123
-      roles: SYSTEM
-  rabbitmq:
-    host: ${RABBIT_HOST:192.168.1.101}
-    port: ${RABBIT_PORT:5672}
-    username: ${RABBIT_USERNAME:sid}
-    password: ${RABBIT_PASSWORD:111111}
-    virtual-host: ${RABBIT_VHOST:guilin}
-  zipkin:
-    sender:
-      type: rabbit
-    base-url: http://zipkin-service/
-  sleuth:
-    sampler:
-      probability: 1.0
+
+zipkin:
+  collector:
+    rabbitmq:
+      addresses: ${RABBIT_HOST:192.168.1.101}:${RABBIT_PORT:5672}
+      username: ${RABBIT_USERNAME:sid}
+      password: ${RABBIT_PASSWORD:111111}
+      queue: zipkin
+      virtual-host: ${RABBIT_VHOST:guilin}
 
 management:
   endpoints:
     web:
       base-path: /manage
       exposure:
-        include: configprops, env, health, info, threaddump, gateway, metrics
+        include: "*"
   endpoint:
     health:
       show-details: when_authorized
       roles: SYSTEM
     metrics:
       enabled: true
+    hystrix:
+      stream:
+        enabled: false
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
   info:
     git:
       mode: full
@@ -47,9 +42,7 @@ management:
 info:
   project:
     version: @project.version@
-zipkin:
-  rabbitmq:
-    queue: zipkin
+
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
 # eureka.client.serviceUrl.defaultZone need to be set in
@@ -67,20 +60,6 @@ eureka:
     preferSameZoneEureka: true
     registryFetchIntervalSeconds: 30
 
-#mybatis:
-#  config-location: classpath:mybatis-config.xml
-
-# swagger
-application:
-  swagger:
-    enable: ${SWAGGER_ENABLED:true}
-    default-include-pattern: /api/.*
-    title: @project.artifactId@
-    description: API documentation
-    version: v1
-    terms-of-service-url:
-    contact-name:
-    contact-url:
-    contact-email:
-    license:
-    license-url:
+logging:
+  level:
+    ROOT: info

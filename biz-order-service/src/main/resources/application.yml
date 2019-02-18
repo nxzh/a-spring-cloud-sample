@@ -6,37 +6,6 @@ server:
     buffer-size: 1024
     direct-buffers: true
 spring:
-  rabbitmq:
-    host: ${RABBIT_HOST:192.168.1.101}
-    port: ${RABBIT_PORT:5672}
-    username: ${RABBIT_USERNAME:sid}
-    password: ${RABBIT_PASSWORD:111111}
-    virtual-host: ${RABBIT_VHOST:guilin}
-  cloud:
-    stream:
-      bindings:
-        int_input:
-          destination: guilin_int
-          content-type: application/json
-          group: order
-          consumer:
-            max-attempts: 1
-        int_output:
-          destination: guilin_int
-          content-type: application/json
-
-      rabbit:
-        bindings:
-          int_input:
-            consumer:
-              acknowledge-mode: MANUAL
-              auto-bind-dlq: true
-              bindingRoutingKey: '#.order.#'
-          int_output:
-            producer:
-              transacted: true
-              routingKeyExpression: '''basket'''
-
   security:
     oauth2:
       resourceserver:
@@ -57,7 +26,42 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-
+  rabbitmq:
+    host: ${RABBIT_HOST:192.168.1.101}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USERNAME:sid}
+    password: ${RABBIT_PASSWORD:111111}
+    virtual-host: ${RABBIT_VHOST:guilin}
+  zipkin:
+    sender:
+      type: rabbit
+    base-url: http://zipkin-service/
+  sleuth:
+    sampler:
+      probability: 1.0
+  cloud:
+    stream:
+      bindings:
+        int_input:
+          destination: guilin_int
+          content-type: application/json
+          group: order
+          consumer:
+            max-attempts: 1
+        int_output:
+          destination: guilin_int
+          content-type: application/json
+      rabbit:
+        bindings:
+          int_input:
+            consumer:
+              acknowledge-mode: MANUAL
+              auto-bind-dlq: true
+              bindingRoutingKey: '#.order.#'
+          int_output:
+            producer:
+              transacted: true
+              routingKeyExpression: '''basket'''
 
 management:
   endpoints:
@@ -74,12 +78,12 @@ management:
   info:
     git:
       mode: full
-
-
 info:
   project:
     version: @project.version@
-
+zipkin:
+  rabbitmq:
+    queue: zipkin
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
 # eureka.client.serviceUrl.defaultZone need to be set in

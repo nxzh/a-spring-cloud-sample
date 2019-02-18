@@ -13,7 +13,6 @@ server:
         http-only: true
 
 spring:
-
   # TODO: Use database to store user information.
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -26,6 +25,19 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
+  rabbitmq:
+    host: ${RABBIT_HOST:192.168.1.101}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USERNAME:sid}
+    password: ${RABBIT_PASSWORD:111111}
+    virtual-host: ${RABBIT_VHOST:guilin}
+  zipkin:
+    sender:
+      type: rabbit
+    base-url: http://zipkin-service/
+  sleuth:
+    sampler:
+      probability: 1.0
 
 management:
   endpoints:
@@ -47,7 +59,9 @@ management:
 info:
   project:
     version: @project.version@
-
+zipkin:
+  rabbitmq:
+    queue: zipkin
 # Put eureka.client.healthcheck.enabled=true application.yml instead of in bootstrap.yml.
 # Otherwise the status in Eureka always get unknown error.
 # eureka.client.serviceUrl.defaultZone need to be set in

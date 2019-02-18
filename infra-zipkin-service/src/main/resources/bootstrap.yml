@@ -1,12 +1,12 @@
 spring:
   application:
-    name: basket-service
+    name: zipkin-service
   cloud:
     config:
-      enabled: true
+      enabled: false
       fail-fast: true
       discovery:
-        enabled: true
+        enabled: false
         service-id: config-service
       username: ${CONFIG_SERVER_USERNAME:config}
       password: ${CONFIG_SERVER_PASSWORD:cfg123}
@@ -17,3 +17,5 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://${REGISTRY_USERNAME:eureka}:${REGISTRY_PASSWORD:erk123}@${REGISTRY_HOSTNAME:localhost}:${REGISTRY_PORT:8761}/eureka/
+
+

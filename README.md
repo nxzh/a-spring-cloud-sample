@@ -3,6 +3,3 @@
 
 ## Config Server
 
-Use the SSH authentication. Run: 
-
-``
